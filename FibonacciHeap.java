@@ -85,8 +85,8 @@ public class FibonacciHeap {
                 oldMin.prev.setNext(oldMin.next);
             } else {
                 // adding the children to the parent place
-                oldMin.prev.setNext(oldMin.firstChild);
                 oldMin.firstChild.prev.setNext(oldMin.next);
+                oldMin.prev.setNext(oldMin.firstChild);
             }
         }
         
