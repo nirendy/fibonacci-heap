@@ -194,16 +194,18 @@ public class FibonacciHeap {
         
         public Iterator<HeapNode> getChildIterator() {
             HeapNode firstChild = this.child;
-            HeapNode cur        = this.child;
             return new Iterator<HeapNode>() {
+                private HeapNode cur = firstChild;
+                
                 @Override
                 public boolean hasNext() {
-                    return (!HeapNode.this.isLeaf()) || cur.next == firstChild;
+                    return (!HeapNode.this.isLeaf()) || this.cur.next == firstChild;
                 }
                 
                 @Override
                 public HeapNode next() {
-                    return cur.next;
+                    this.cur = this.cur.next;
+                    return this.cur;
                 }
             };
         }
