@@ -198,7 +198,7 @@ public class FibonacciHeap {
             return new Iterator<HeapNode>() {
                 @Override
                 public boolean hasNext() {
-                    return (!cur.isLeaf()) || cur.next == firstChild;
+                    return (!HeapNode.this.isLeaf()) || cur.next == firstChild;
                 }
                 
                 @Override
