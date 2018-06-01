@@ -7,7 +7,9 @@ public class FibonacciHeapPrintable extends FibonacciHeap {
     public String toString() {
         StringBuilder output = new StringBuilder();
         for (HeapNode heapNode : this.treesList) {
-            output.append("").append(heapNode.key).append(" --> ");
+            output
+                    .append(printNode(heapNode))
+                    .append(" --> ");
         }
         output.append(" #");
         
@@ -16,6 +18,7 @@ public class FibonacciHeapPrintable extends FibonacciHeap {
     
     private static String printNode(HeapNode node) {
         StringBuilder output = new StringBuilder();
+        output.append(node.key);
         
         return output.toString();
     }
