@@ -1,3 +1,4 @@
+import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
@@ -187,5 +188,24 @@ public class FibonacciHeap {
             return this.key;
         }
         
+        public boolean isLeaf() {
+            return this.rank == 0;
+        }
+        
+        public Iterator<HeapNode> getChildIterator() {
+            HeapNode firstChild = this.child;
+            HeapNode cur        = this.child;
+            return new Iterator<HeapNode>() {
+                @Override
+                public boolean hasNext() {
+                    return (!cur.isLeaf()) || cur.next == firstChild;
+                }
+                
+                @Override
+                public HeapNode next() {
+                    return cur.next;
+                }
+            };
+        }
     }
 }
