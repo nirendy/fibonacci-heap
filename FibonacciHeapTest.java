@@ -26,6 +26,7 @@ public class FibonacciHeapTest {
             heap.deleteMin();
             System.out.println(
                     Arrays.toString(heap.countersRep()) + //
+                    " Min: " + heap.findMin().key + //
                     " Size: " + heap.size() + //
                     " TreesCount: " + heap.treesCount()
             );

@@ -109,6 +109,8 @@ public class FibonacciHeap {
         
         while (treesListIterator.hasNext()) {
             HeapNode nextTree = treesListIterator.next();
+            nextTree.remove();
+            nextTree.setNext(nextTree);
             
             while (bucketArr[nextTree.rank] != null) {
                 // bucket is full
@@ -116,7 +118,6 @@ public class FibonacciHeap {
                 nextTree = link(bucketArr[nextTree.rank], nextTree);
                 bucketArr[nextTree.rank - 1] = null;
             }
-            nextTree.remove();
             bucketArr[nextTree.rank] = nextTree;
         }
         
@@ -190,7 +191,9 @@ public class FibonacciHeap {
     }
     
     private int getPossibleMaxRank() {
-        return (int) Math.floor(Math.log(this.size()) + 1);
+        // TODO: where to put the +1
+        
+        return (int) Math.floor(Math.log(this.size()) + 1) + 1;
     }
     
     /**
@@ -199,8 +202,6 @@ public class FibonacciHeap {
      * Return a counters array, where the value of the i-th entry is the number of trees of order i in the heap.
      */
     public int[] countersRep() {
-        // TODO: where to put the +1
-        
         int[] arr = new int[this.getPossibleMaxRank()];
         
         Iterator<HeapNode> childIterator = this.first.getSiblingsIterator();
@@ -343,24 +344,23 @@ public class FibonacciHeap {
         }
         
         public Iterator<HeapNode> getSiblingsIterator() {
-            HeapNode firstChild = this;
             return new Iterator<HeapNode>() {
                 private HeapNode curr = null;
+                private HeapNode next = HeapNode.this;
+                private HeapNode lastChild = HeapNode.this.prev;
                 
                 @Override
                 public boolean hasNext() {
-                    return curr == null || this.curr.next != firstChild;
+                    return this.curr == null || this.curr != this.lastChild;
                 }
                 
                 @Override
                 public HeapNode next() {
-                    if (this.curr == null) {
-                        this.curr = firstChild;
-                    } else {
-                        this.curr = this.curr.next;
-                    }
+                    this.curr = this.next;
+                    this.next = this.curr.next;
                     return curr;
                 }
+                
             };
         }
         
