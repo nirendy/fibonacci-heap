@@ -1,5 +1,4 @@
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.*;
 
 /**
  * FibonacciHeap
@@ -7,16 +6,13 @@ import java.util.LinkedList;
  * An implementation of fibonacci heap over non-negative integers.
  */
 public class FibonacciHeap {
-    static protected int                  totalLinks;
-    static protected int                  totalCuts;
-    protected        LinkedList<HeapNode> treesList;
-    protected        HeapNode             min;
-    protected        int                  markedNodesCount; // number of marked nodes at the moment
-    protected        int                  size;
-    
-    public FibonacciHeap() {
-        this.treesList = new LinkedList<HeapNode>();
-    }
+    static private int totalLinks       = 0;
+    static private int totalCuts        = 0;
+    private        int markedNodesCount = 0; // number of marked nodes at the moment
+    private        int size             = 0; // number of elements in the heap
+    private        int treesCount       = 0; // number of trees in the heap
+    private HeapNode first;
+    private HeapNode min;
     
     /**
      * public boolean empty()
@@ -30,8 +26,12 @@ public class FibonacciHeap {
         return this.size() == 0;
     }
     
-    protected int treesCount() {
-        return this.treesList.size();
+    public int treesCount() {
+        return this.treesCount;
+    }
+    
+    private HeapNode last() {
+        return this.first.prev;
     }
     
     /**
@@ -40,13 +40,21 @@ public class FibonacciHeap {
      * Creates a node (of type HeapNode) which contains the given key, and inserts it into the heap.
      */
     public HeapNode insert(int key) {
-        // TODO: update size?
-        
         HeapNode newNode = new HeapNode(key);
-        this.treesList.add(newNode);
+        if (this.empty()) {
+            this.min = newNode;
+            this.first = newNode;
+            newNode.setNext(newNode);
+        } else {
+            this.last().setNext(newNode);
+            newNode.setNext(this.first);
+        }
+        
         this.size++;
+        this.treesCount++;
         return newNode;
     }
+    
     
     /**
      * public void deleteMin()
@@ -54,9 +62,92 @@ public class FibonacciHeap {
      * Delete the node containing the minimum key.
      */
     public void deleteMin() {
-        // TODO
-        return;
+        HeapNode oldMin = this.findMin();
         
+        
+        if (oldMin.isOnlyChild()) {
+            if (oldMin.isLeaf()) {
+                // convert to empty list now
+                first = null;
+                min = null;
+            } else {
+                // converts the tree list to be the child tree list
+                first = oldMin.firstChild;
+            }
+        } else {
+            // moving the first to the next
+            if (oldMin == this.first) {
+                this.first = oldMin.next;
+            }
+            
+            if (oldMin.isLeaf()) {
+                // skipping the deleted one
+                oldMin.prev.setNext(oldMin.next);
+            } else {
+                // adding the children to the parent place
+                oldMin.prev.setNext(oldMin.firstChild);
+                oldMin.firstChild.prev.setNext(oldMin.next);
+            }
+        }
+        
+        this.size--;
+        this.consolidating();
+        this.updateMin();
+        this.updateTreesCount();
+    }
+    
+    // adding at the end
+    private void add(HeapNode x) {
+        this.last().setNext(x);
+        x.setNext(this.first);
+        
+    }
+    
+    private void consolidating() {
+        HeapNode[]         bucketArr         = new HeapNode[this.getPossibleMaxRank()];
+        Iterator<HeapNode> treesListIterator = getTreesListIterator();
+        
+        while (treesListIterator.hasNext()) {
+            HeapNode nextTree = treesListIterator.next();
+            
+            while (bucketArr[nextTree.rank] != null) {
+                // bucket is full
+                
+                nextTree = link(bucketArr[nextTree.rank], nextTree);
+                bucketArr[nextTree.rank - 1] = null;
+            }
+            nextTree.remove();
+            bucketArr[nextTree.rank] = nextTree;
+        }
+        
+        // TODO: should we update min or update trees count?
+        
+        this.first = null;
+        for (HeapNode heapNode : bucketArr) {
+            if (heapNode != null) {
+                if (this.first == null) {
+                    this.first = heapNode;
+                    this.first.setNext(this.first);
+                } else {
+                    add(heapNode);
+                }
+                
+            }
+        }
+    }
+    
+    private void updateMin() {
+        this.min = this.first;
+        this.getTreesListIterator().forEachRemaining((x) -> this.min = x.key < this.min.key ? x : this.min);
+    }
+    
+    private void updateTreesCount() {
+        this.treesCount = 0;
+        this.getTreesListIterator().forEachRemaining((x) -> this.treesCount++);
+    }
+    
+    protected Iterator<HeapNode> getTreesListIterator() {
+        return this.first.getSiblingsIterator();
     }
     
     /**
@@ -74,10 +165,13 @@ public class FibonacciHeap {
      * Meld the heap with heap2
      */
     public void meld(FibonacciHeap heap2) {
-        // TODO: update size?
-        
         // add the list at the end of the list
-        this.treesList.addAll(heap2.treesList);
+        HeapNode oldLast = this.last();
+        heap2.last().setNext(this.first);
+        oldLast.setNext(heap2.first);
+        
+        // update sizes
+        this.treesCount += heap2.treesCount();
         this.size += heap2.size();
         
         // update min
@@ -95,6 +189,10 @@ public class FibonacciHeap {
         return this.size;
     }
     
+    private int getPossibleMaxRank() {
+        return (int) Math.floor(Math.log(this.size()) + 1);
+    }
+    
     /**
      * public int[] countersRep()
      * <p>
@@ -103,9 +201,11 @@ public class FibonacciHeap {
     public int[] countersRep() {
         // TODO: where to put the +1
         
-        int[] arr = new int[(int) Math.floor(Math.log(this.size()) + 1)];
-        for (HeapNode heapNode : this.treesList) {
-            arr[heapNode.rank]++;
+        int[] arr = new int[this.getPossibleMaxRank()];
+        
+        Iterator<HeapNode> childIterator = this.first.getSiblingsIterator();
+        while (childIterator.hasNext()) {
+            arr[childIterator.next().rank]++;
         }
         return arr;
     }
@@ -164,6 +264,27 @@ public class FibonacciHeap {
         return totalCuts;
     }
     
+    static private HeapNode link(HeapNode x, HeapNode y) {
+        totalLinks++;
+        
+        // deciding who's the parent
+        HeapNode parentNode = x.key < y.key ? x : y;
+        HeapNode childNode  = parentNode == x ? y : x;
+        
+        if (parentNode.isLeaf()) {
+            parentNode.setFirstChild(childNode);
+        } else {
+            // puts the child as the first node of the parent
+            HeapNode oldFirst = parentNode.firstChild;
+            parentNode.setFirstChild(childNode);
+            oldFirst.prev.setNext(childNode);
+            childNode.setNext(oldFirst);
+        }
+        
+        parentNode.rank++;
+        return parentNode;
+    }
+    
     /**
      * public class HeapNode
      * <p>
@@ -172,42 +293,94 @@ public class FibonacciHeap {
      * another file
      */
     public class HeapNode {
-        protected int      rank;
-        protected boolean  mark;
-        protected HeapNode parent;
-        protected HeapNode child;
-        protected HeapNode next;
-        protected HeapNode prev;
-        public    int      key;
+        private int      rank       = 0;
+        private boolean  mark       = false;
+        private HeapNode parent     = null;
+        private HeapNode firstChild = null;
+        private HeapNode next;
+        private HeapNode prev;
+        public  int      key;
         
         public HeapNode(int key) {
             this.key = key;
+        }
+        
+        private boolean isOnlyChild() {
+            return this.next == this;
+        }
+        
+        protected boolean isLeaf() {
+            // todo: rank==0?
+            return this.firstChild == null;
+        }
+        
+        private boolean isRoot() {
+            return this.parent == null;
         }
         
         public int getKey() {
             return this.key;
         }
         
-        public boolean isLeaf() {
-            return this.rank == 0;
+        public void remove() {
+            // TODO: what if only child
+            this.prev.setNext(this.next);
         }
         
-        public Iterator<HeapNode> getChildIterator() {
-            HeapNode firstChild = this.child;
+        
+        public void setParent(HeapNode parent) {
+            this.parent = parent;
+        }
+        
+        public void setFirstChild(HeapNode firstChild) {
+            this.firstChild = firstChild;
+        }
+        
+        // set this.next and next.prev
+        public void setNext(HeapNode next) {
+            this.next = next;
+            next.prev = this;
+        }
+        
+        public Iterator<HeapNode> getSiblingsIterator() {
+            HeapNode firstChild = this;
             return new Iterator<HeapNode>() {
-                private HeapNode cur = firstChild;
+                private HeapNode curr = null;
                 
                 @Override
                 public boolean hasNext() {
-                    return (!HeapNode.this.isLeaf()) || this.cur.next == firstChild;
+                    return curr == null || this.curr.next != firstChild;
                 }
                 
                 @Override
                 public HeapNode next() {
-                    this.cur = this.cur.next;
-                    return this.cur;
+                    if (this.curr == null) {
+                        this.curr = firstChild;
+                    } else {
+                        this.curr = this.curr.next;
+                    }
+                    return curr;
                 }
             };
+        }
+        
+        public Iterator<HeapNode> getChildIterator() {
+            if (this.isLeaf()) {
+                // empty iterator
+                return new Iterator<HeapNode>() {
+                    @Override
+                    public boolean hasNext() {
+                        return false;
+                    }
+                    
+                    @Override
+                    public HeapNode next() {
+                        return null;
+                    }
+                };
+            } else {
+                return this.firstChild.getSiblingsIterator();
+            }
         }
     }
 }

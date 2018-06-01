@@ -9,10 +9,12 @@ public class FibonacciHeapPrintable extends FibonacciHeap {
     static final int LEVEL_SPACE = 1;
     
     public String toString() {
-        StringBuilder output = new StringBuilder();
-        for (HeapNode heapNode : this.treesList) {
+        StringBuilder      output            = new StringBuilder();
+        Iterator<HeapNode> treesListIterator = this.getTreesListIterator();
+        
+        while (treesListIterator.hasNext()) {
             output
-                    .append(printNode(heapNode, 1))
+                    .append(printNode(treesListIterator.next(), 1))
                     .append("\n\n|\n\n")
             ;
         }
