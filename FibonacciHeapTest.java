@@ -15,7 +15,7 @@ public class FibonacciHeapTest {
     }
     
     public static void main(String[] args) {
-        test8();
+        test6();
     }
     
     private static void test8() {
@@ -45,29 +45,36 @@ public class FibonacciHeapTest {
     
     
     private static void test6() {
+        // this test case want to make sure that the marks get removed when delete min
+        
         FibonacciHeapPrintable                 heap = new FibonacciHeapPrintable();
         sun.misc.Queue<FibonacciHeap.HeapNode> a    = new sun.misc.Queue<>();
+        sun.misc.Queue<FibonacciHeap.HeapNode> b    = new sun.misc.Queue<>();
         doOperation(heap, OperationType.Ins, 50, null);
-        doOperation(heap, OperationType.Ins, 60, null);
+        b.enqueue(doOperation(heap, OperationType.Ins, 60, null).get());
         a.enqueue(doOperation(heap, OperationType.Ins, 70, null).get());
-        doOperation(heap, OperationType.Ins, 80, null);
+        doOperation(heap, OperationType.Ins, 80, null).get();
         a.enqueue(doOperation(heap, OperationType.Ins, 90, null).get());
         doOperation(heap, OperationType.Ins, 100, null);
         doOperation(heap, OperationType.Ins, 110, null);
         doOperation(heap, OperationType.Ins, 120, null);
         a.enqueue(doOperation(heap, OperationType.Ins, 130, null).get());
         doOperation(heap, OperationType.DelMin, null, null);
+        
         try {
             doOperation(heap, OperationType.Dec, 11, a.dequeue());
-            doOperation(heap, OperationType.Dec, 11, a.dequeue());
-            doOperation(heap, OperationType.Dec, 11, a.dequeue());
+            doOperation(heap, OperationType.Dec, 40, a.dequeue());
+            doOperation(heap, OperationType.DelMin, null, null);
+            doOperation(heap, OperationType.DelMin, null, null);
+
+            doOperation(heap, OperationType.Ins, 70, null);
+            doOperation(heap, OperationType.Del, null, b.dequeue());
+            
+            
         } catch (InterruptedException err) {
             System.out.println(err);
         }
         
-        
-        doOperation(heap, OperationType.DelMin, null, null);
-        doOperation(heap, OperationType.DelMin, null, null);
         
         
         System.out.println("done");
