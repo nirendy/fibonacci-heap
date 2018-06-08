@@ -210,10 +210,18 @@ public class FibonacciHeap {
      * Meld the heap with heap2
      */
     public void meld(FibonacciHeap heap2) {
-        // add the list at the end of the list
-        HeapNode oldLast = this.last();
-        heap2.last().setNext(this.first);
-        oldLast.setNext(heap2.first);
+        // add tree list of heap2 at the end of this heap
+        if (heap2.empty()){
+            return;
+        }
+        if (this.empty()){ // heap2 is not empty
+            this.first = heap2.first;
+        }
+        else {
+            HeapNode oldLast = this.last();
+            heap2.last().setNext(this.first);
+            oldLast.setNext(heap2.first);
+        }
         
         // update sizes
         this.treesCount += heap2.treesCount();
@@ -234,10 +242,12 @@ public class FibonacciHeap {
     public int size() {
         return this.size;
     }
-    
+
+    /*
+
+     */
     private int getPossibleMaxRank() {
         // TODO: where to put the +1
-        
         return (int) Math.floor((Math.log(this.size()) + 1) / Math.log(2));
     }
     
