@@ -7,7 +7,7 @@ import java.util.*;
  */
 public class FibonacciHeap {
     static private int totalLinks       = 0;
-    static private int totalCuts        = 0;
+    static private int totalCuts        = 0; //
     private        int markedNodesCount = 0; // number of marked nodes at the moment
     private        int size             = 0; // number of elements in the heap
     private        int treesCount       = 0; // number of trees in the heap
@@ -25,11 +25,17 @@ public class FibonacciHeap {
     public boolean empty() {
         return this.size() == 0;
     }
-    
+
+    /**
+     * Returns the number of trees in the heap
+     */
     public int treesCount() {
         return this.treesCount;
     }
-    
+
+    /*
+    * Returns the last node in the
+     */
     private HeapNode last() {
         return this.first.prev;
     }
@@ -47,11 +53,16 @@ public class FibonacciHeap {
         return newNode;
         
     }
-    
-    public HeapNode insertNode(HeapNode newNode) {
-        // disconnect the node if was part of a tree before
+
+    /**
+     * Insert a HeapNode to the heap.
+     * Disconnect the node from older family if needed
+     */
+    private HeapNode insertNode(HeapNode newNode) {
+        // disconnect the node if it was part of a tree before
         newNode.disconnect();
-        
+
+        // if the heap was empty before the insertion
         if (this.empty()) {
             this.min = newNode;
             this.first = newNode;
@@ -60,11 +71,11 @@ public class FibonacciHeap {
             this.last().setNext(newNode);
             newNode.setNext(this.first);
         }
-        
+
         this.treesCount++;
         return newNode;
     }
-    
+
     public void resetTree() {
         this.first = null;
         this.min = null;
@@ -81,44 +92,48 @@ public class FibonacciHeap {
         HeapNode oldMin = this.findMin();
         
         
-        if (oldMin.isOnlyChild()) {
-            if (oldMin.isLeaf()) {
-                // convert to empty list now
-                this.resetTree();
+        if (oldMin.isOnlyChild()) { // only one tree in the heap
+            if (oldMin.isLeaf()) { // and the single tree contains only one node
+                this.resetTree(); // convert to empty heap now
                 return;
             } else {
                 // converts the tree list to be the child tree list
                 first = oldMin.firstChild;
             }
-        } else {
-            // moving the first to the next
-            if (oldMin == this.first) {
+        } else { // more than one tree in the heap
+            if (oldMin == this.first) { // move the 'first' pointer to a sibling if needed
                 this.first = oldMin.next;
             }
             
             if (oldMin.isLeaf()) {
-                // skipping the deleted one
+                // oldMin has no children - just remove him from tree list
                 oldMin.prev.setNext(oldMin.next);
             } else {
-                // adding the children to the parent place
+                // adding the oldMin children to list
                 oldMin.firstChild.prev.setNext(oldMin.next);
                 oldMin.prev.setNext(oldMin.firstChild);
             }
         }
         
         this.size--;
-        this.consolidating();
-        this.updateMin();
-        this.updateTreesCount();
+        this.consolidating(); // successive linking
+        this.updateMin(); // find new min in the restructured heap, containing up to log(n+1) trees - O(logn)
+        this.updateTreesCount(); // count the number of trees in heap - O(logn)
     }
     
-    // adding at the end
+    /*
+    * Add a node (tree) to the tree list
+     */
     private void add(HeapNode x) {
         this.last().setNext(x);
         x.setNext(this.first);
         
     }
-    
+
+    /*
+    * Change the structure of the heap using successive linking, at the end of the process the
+    * heap contains up to log(n+1) trees, 1 of each rank
+     */
     private void consolidating() {
         HeapNode[]         bucketArr         = new HeapNode[this.getPossibleMaxRank()];
         Iterator<HeapNode> treesListIterator = getTreesListIterator();
@@ -137,7 +152,7 @@ public class FibonacciHeap {
         }
         
         this.first = null;
-        for (HeapNode heapNode : bucketArr) {
+        for (HeapNode heapNode : bucketArr) { // connect the new trees
             if (heapNode != null) {
                 if (this.first == null) {
                     this.first = heapNode;
@@ -149,20 +164,33 @@ public class FibonacciHeap {
             }
         }
     }
-    
+
+    /*
+    * @pre: heap contains up to log(n+1) trees
+    * Iterate over the tree list, find a new minimum
+    * Also removes old parent pointers and marks
+     */
     private void updateMin() {
         this.min = this.first;
         this.getTreesListIterator().forEachRemaining((x) -> {
             x.parent = null;
+            x.unMarkNode();
             this.min = x.key < this.min.key ? x : this.min;
         });
     }
-    
+
+    /*
+    * @pre: heap contains up to log(n+1) trees
+    * Update the number of trees (field) in the heap
+     */
     private void updateTreesCount() {
         this.treesCount = 0;
         this.getTreesListIterator().forEachRemaining((x) -> this.treesCount++);
     }
-    
+
+    /*
+    * Returns an iterator of the trees in the heap
+     */
     protected Iterator<HeapNode> getTreesListIterator() {
         return this.first.getSiblingsIterator();
     }
@@ -190,6 +218,7 @@ public class FibonacciHeap {
         // update sizes
         this.treesCount += heap2.treesCount();
         this.size += heap2.size();
+        this.markedNodesCount += heap2.markedNodesCount;
         
         // update min
         if (heap2.min.key < this.min.key) {
@@ -401,9 +430,11 @@ public class FibonacciHeap {
         protected boolean isRoot() {
             return this.parent == null;
         }
-        
+
+        /*
+        * Disconnect a node from its parents and siblings
+         */
         private void disconnect() {
-            // disconnect the node
             if (!this.isRoot()) {
                 
                 // set parent first child
@@ -426,7 +457,10 @@ public class FibonacciHeap {
         public int getKey() {
             return this.key;
         }
-        
+
+        /*
+        * Disconnect a node from its siblings
+         */
         public void removeSiblingsRelations() {
             this.prev.setNext(this.next);
             this.setNext(this);
