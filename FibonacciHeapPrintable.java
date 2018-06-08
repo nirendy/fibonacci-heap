@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.Iterator;
 
 /**
@@ -7,9 +8,27 @@ import java.util.Iterator;
  */
 public class FibonacciHeapPrintable extends FibonacciHeap {
     static final int LEVEL_SPACE = 1;
+    public String lastString;
+    
+    public void updateString() {
+        StringBuilder stringB = new StringBuilder();
+        stringB.append(Arrays.toString(this.countersRep()))
+                .append(" Size: ")
+                .append(this.size())
+                .append(" min : ")
+                .append(this.findMin().getKey())
+                .append(" TreesCount: ")
+                .append(this.treesCount())
+                .append("\n");
+        
+        this.lastString = stringB.toString() + toString();
+    }
     
     public String toString() {
-        StringBuilder      output            = new StringBuilder();
+        StringBuilder output = new StringBuilder();
+        if (empty()) {
+            return "<Empty Heap>";
+        }
         Iterator<HeapNode> treesListIterator = this.getTreesListIterator();
         
         while (treesListIterator.hasNext()) {

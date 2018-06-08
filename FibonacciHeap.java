@@ -65,6 +65,12 @@ public class FibonacciHeap {
         return newNode;
     }
     
+    public void resetTree() {
+        this.first = null;
+        this.min = null;
+        this.size = 0;
+        this.treesCount = 0;
+    }
     
     /**
      * public void deleteMin()
@@ -78,8 +84,8 @@ public class FibonacciHeap {
         if (oldMin.isOnlyChild()) {
             if (oldMin.isLeaf()) {
                 // convert to empty list now
-                first = null;
-                min = null;
+                this.resetTree();
+                return;
             } else {
                 // converts the tree list to be the child tree list
                 first = oldMin.firstChild;
@@ -203,7 +209,7 @@ public class FibonacciHeap {
     private int getPossibleMaxRank() {
         // TODO: where to put the +1
         
-        return (int) Math.floor(Math.log(this.size()) + 1) + 1;
+        return (int) Math.floor((Math.log(this.size()) + 1) / Math.log(2));
     }
     
     /**
@@ -212,6 +218,9 @@ public class FibonacciHeap {
      * Return a counters array, where the value of the i-th entry is the number of trees of order i in the heap.
      */
     public int[] countersRep() {
+        if (this.empty()) {
+            return new int[1];
+        }
         int[] arr = new int[this.getPossibleMaxRank()];
         
         Iterator<HeapNode> childIterator = this.first.getSiblingsIterator();
@@ -227,14 +236,12 @@ public class FibonacciHeap {
      * Deletes the node x from the heap.
      */
     public void delete(HeapNode x) {
-        size--;
-        if (size == 0) {
-            this.min = null;
-            this.first = null;
+        if (size == 1) {
+            this.resetTree();
             return;
         }
         
-        this.decreaseKey(x, x.getKey() - this.findMin().getKey() - 1);
+        this.decreaseKey(x, x.getKey() - this.findMin().getKey() + 1);
         this.deleteMin();
         
     }
@@ -368,8 +375,18 @@ public class FibonacciHeap {
             return this.mark;
         }
         
-        protected void markNode() {
-            this.mark = true;
+        private void markNode() {
+            if (!this.isMarked()) {
+                this.mark = true;
+                FibonacciHeap.this.markedNodesCount++;
+            }
+        }
+        
+        private void unMarkNode() {
+            if (this.isMarked()) {
+                this.mark = false;
+                FibonacciHeap.this.markedNodesCount--;
+            }
         }
         
         private void decreaseKeyBy(int delta) {
@@ -402,7 +419,8 @@ public class FibonacciHeap {
                 this.parent.decreaseRank();
                 this.parent = null;
             }
-            this.mark = false;
+            
+            this.unMarkNode();
         }
         
         public int getKey() {

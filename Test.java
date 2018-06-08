@@ -1,14 +1,14 @@
-//FibonacciHeapPrintable Tester
+//FibonacciHeap Tester
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class Test {
     
-    static Heap                   heap;
-    static FibonacciHeapPrintable fibonacciHeap;
-    static double                 grade;
-    static double                 testScore;
+    static Heap          heap;
+    static FibonacciHeap fibonacciHeap;
+    static double        grade;
+    static double        testScore;
     
     public static void main(String[] args) {
         
@@ -166,7 +166,7 @@ public class Test {
     
     static void test0() {
         String test = "test0";
-        fibonacciHeap = new FibonacciHeapPrintable();
+        fibonacciHeap = new FibonacciHeap();
         
         ArrayList<Integer> numbers = new ArrayList<>();
         
@@ -192,7 +192,7 @@ public class Test {
     static void test1() {
         String test = "test1";
         heap = new Heap();
-        fibonacciHeap = new FibonacciHeapPrintable();
+        fibonacciHeap = new FibonacciHeap();
         addKeys(0);
         while (!heap.empty()) {
             if (heap.findMin() != fibonacciHeap.findMin().getKey() || heap.size() != fibonacciHeap.size()) {
@@ -210,7 +210,7 @@ public class Test {
     static void test2() {
         String test = "test2";
         heap = new Heap();
-        fibonacciHeap = new FibonacciHeapPrintable();
+        fibonacciHeap = new FibonacciHeap();
         addKeysReverse(0);
         while (!heap.empty()) {
             if (heap.findMin() != fibonacciHeap.findMin().getKey() || heap.size() != fibonacciHeap.size()) {
@@ -228,7 +228,7 @@ public class Test {
     static void test3() {
         String test = "test3";
         heap = new Heap();
-        fibonacciHeap = new FibonacciHeapPrintable();
+        fibonacciHeap = new FibonacciHeap();
         addKeys(0);
         addKeysReverse(4000);
         addKeys(2000);
@@ -248,7 +248,7 @@ public class Test {
     static void test4() {
         String test = "test4";
         heap = new Heap();
-        fibonacciHeap = new FibonacciHeapPrintable();
+        fibonacciHeap = new FibonacciHeap();
         addKeys(0);
         addKeysReverse(4000);
         addKeys(2000);
@@ -281,7 +281,7 @@ public class Test {
     
     static void test5() {
         String test = "test5";
-        fibonacciHeap = new FibonacciHeapPrintable();
+        fibonacciHeap = new FibonacciHeap();
         addKeys(0);
         addKeys(0);
         addKeys(0);
@@ -302,7 +302,7 @@ public class Test {
     
     static void test6() {
         String test = "test6";
-        fibonacciHeap = new FibonacciHeapPrintable();
+        fibonacciHeap = new FibonacciHeap();
         addKeysReverse(1000);
         addKeysReverse(1000);
         addKeys(0);
@@ -329,11 +329,11 @@ public class Test {
     static void test7() {
         String test = "test7";
         heap = new Heap();
-        fibonacciHeap = new FibonacciHeapPrintable();
+        fibonacciHeap = new FibonacciHeap();
         addKeys(1000);
         addKeysReverse(3000);
         
-        ArrayList<FibonacciHeapPrintable.HeapNode> nodes = new ArrayList<>();
+        ArrayList<FibonacciHeap.HeapNode> nodes = new ArrayList<>();
         
         for (int i = 2000; i < 3000; i++) {
             heap.insert(i);
@@ -365,11 +365,11 @@ public class Test {
     static void test8() {
         String test = "test8";
         heap = new Heap();
-        fibonacciHeap = new FibonacciHeapPrintable();
+        fibonacciHeap = new FibonacciHeap();
         addKeys(7000);
         addKeysReverse(9000);
         
-        ArrayList<FibonacciHeapPrintable.HeapNode> nodes = new ArrayList<>();
+        ArrayList<FibonacciHeap.HeapNode> nodes = new ArrayList<>();
         
         for (int i = 2000; i < 3000; i++) {
             heap.insert(i);
@@ -401,11 +401,11 @@ public class Test {
     static void test9() {
         String test = "test9";
         heap = new Heap();
-        fibonacciHeap = new FibonacciHeapPrintable();
+        fibonacciHeap = new FibonacciHeap();
         addKeys(7000);
         addKeysReverse(9000);
         
-        ArrayList<FibonacciHeapPrintable.HeapNode> nodes = new ArrayList<>();
+        ArrayList<FibonacciHeap.HeapNode> nodes = new ArrayList<>();
         
         for (int i = 2000; i < 3000; i++) {
             heap.insert(i);
@@ -437,11 +437,11 @@ public class Test {
     static void test10() {
         String test = "test10";
         heap = new Heap();
-        fibonacciHeap = new FibonacciHeapPrintable();
+        fibonacciHeap = new FibonacciHeap();
         addKeys(7000);
         addKeysReverse(9000);
         
-        ArrayList<FibonacciHeapPrintable.HeapNode> nodes = new ArrayList<>();
+        ArrayList<FibonacciHeap.HeapNode> nodes = new ArrayList<>();
         
         for (int i = 2000; i < 3000; i++) {
             heap.insert(i);
@@ -475,9 +475,9 @@ public class Test {
     
     static void test11() {
         String test = "test11";
-        fibonacciHeap = new FibonacciHeapPrintable();
+        fibonacciHeap = new FibonacciHeap();
         addKeys(1000);
-        FibonacciHeapPrintable.HeapNode h = fibonacciHeap.insert(9999);
+        FibonacciHeap.HeapNode h = fibonacciHeap.insert(9999);
         fibonacciHeap.decreaseKey(h, 9999);
         
         if (0 != fibonacciHeap.findMin().getKey()) {
@@ -501,9 +501,9 @@ public class Test {
     
     static void test12() {
         String test = "test12";
-        fibonacciHeap = new FibonacciHeapPrintable();
+        fibonacciHeap = new FibonacciHeap();
         addKeys(1000);
-        FibonacciHeapPrintable.HeapNode h = fibonacciHeap.insert(5000);
+        FibonacciHeap.HeapNode h = fibonacciHeap.insert(5000);
         fibonacciHeap.decreaseKey(h, 4000);
         
         
@@ -530,9 +530,9 @@ public class Test {
     
     static void test13() {
         String test = "test13";
-        fibonacciHeap = new FibonacciHeapPrintable();
+        fibonacciHeap = new FibonacciHeap();
         addKeys(1000);
-        FibonacciHeapPrintable.HeapNode h = fibonacciHeap.insert(9000);
+        FibonacciHeap.HeapNode h = fibonacciHeap.insert(9000);
         fibonacciHeap.decreaseKey(h, 4000);
         
         for (int i = 1000; i < 2000; i++) {
@@ -547,7 +547,7 @@ public class Test {
             return;
         }
         fibonacciHeap.deleteMin();
-        
+    
         if (!fibonacciHeap.empty()) {
             bugFound(test);
         }
@@ -555,10 +555,10 @@ public class Test {
     
     static void test14() {
         String test = "test14";
-        fibonacciHeap = new FibonacciHeapPrintable();
+        fibonacciHeap = new FibonacciHeap();
         addKeys(1000);
         addKeysReverse(7000);
-        FibonacciHeapPrintable.HeapNode h = fibonacciHeap.insert(9000);
+        FibonacciHeap.HeapNode h = fibonacciHeap.insert(9000);
         fibonacciHeap.decreaseKey(h, 4000);
         
         for (int i = 1000; i < 2000; i++) {
@@ -581,7 +581,7 @@ public class Test {
             }
             fibonacciHeap.deleteMin();
         }
-        
+    
         if (!fibonacciHeap.empty()) {
             bugFound(test);
         }
@@ -590,7 +590,7 @@ public class Test {
     
     static void test15() {
         String test = "test15";
-        fibonacciHeap = new FibonacciHeapPrintable();
+        fibonacciHeap = new FibonacciHeap();
         
         for (int i = 1000; i < 10000; i += 1000) {
             addKeys(i);
@@ -598,7 +598,7 @@ public class Test {
         
         fibonacciHeap.deleteMin();
         
-        FibonacciHeapPrintable.HeapNode h = fibonacciHeap.insert(99999);
+        FibonacciHeap.HeapNode h = fibonacciHeap.insert(99999);
         fibonacciHeap.decreaseKey(h, 99999);
         
         if (0 != fibonacciHeap.findMin().getKey()) {
@@ -622,18 +622,18 @@ public class Test {
     
     static void test16() {
         String test = "test16";
-        fibonacciHeap = new FibonacciHeapPrintable();
+        fibonacciHeap = new FibonacciHeap();
         
-        int cuts  = FibonacciHeapPrintable.totalCuts();
-        int links = FibonacciHeapPrintable.totalLinks();
+        int cuts  = FibonacciHeap.totalCuts();
+        int links = FibonacciHeap.totalLinks();
         
         fibonacciHeap.insert(1);
         fibonacciHeap.insert(2);
         fibonacciHeap.insert(3);
-        
+    
         if (fibonacciHeap.potential() != 3 ||
-            FibonacciHeapPrintable.totalCuts() - cuts != 0 ||
-            FibonacciHeapPrintable.totalLinks() - links != 0 ||
+            FibonacciHeap.totalCuts() - cuts != 0 ||
+            FibonacciHeap.totalLinks() - links != 0 ||
             fibonacciHeap.countersRep()[0] != 3) {
             bugFound(test);
         }
@@ -641,19 +641,19 @@ public class Test {
     
     static void test17() {
         String test = "test17";
-        fibonacciHeap = new FibonacciHeapPrintable();
+        fibonacciHeap = new FibonacciHeap();
         
-        int cuts  = FibonacciHeapPrintable.totalCuts();
-        int links = FibonacciHeapPrintable.totalLinks();
+        int cuts  = FibonacciHeap.totalCuts();
+        int links = FibonacciHeap.totalLinks();
         
         fibonacciHeap.insert(1);
         fibonacciHeap.insert(2);
         fibonacciHeap.insert(3);
         fibonacciHeap.deleteMin();
-        
+    
         if (fibonacciHeap.potential() != 1 ||
-            FibonacciHeapPrintable.totalCuts() - cuts != 0 ||
-            FibonacciHeapPrintable.totalLinks() - links != 1 ||
+            FibonacciHeap.totalCuts() - cuts != 0 ||
+            FibonacciHeap.totalLinks() - links != 1 ||
             fibonacciHeap.countersRep()[0] != 0 ||
             fibonacciHeap.countersRep()[1] != 1) {
             bugFound(test);
@@ -662,10 +662,10 @@ public class Test {
     
     static void test18() {
         String test = "test18";
-        fibonacciHeap = new FibonacciHeapPrintable();
+        fibonacciHeap = new FibonacciHeap();
         
-        int cuts  = FibonacciHeapPrintable.totalCuts();
-        int links = FibonacciHeapPrintable.totalLinks();
+        int cuts  = FibonacciHeap.totalCuts();
+        int links = FibonacciHeap.totalLinks();
         
         fibonacciHeap.insert(4);
         fibonacciHeap.insert(5);
@@ -679,10 +679,10 @@ public class Test {
         
         fibonacciHeap.insert(1);
         fibonacciHeap.deleteMin();
-        
+    
         if (fibonacciHeap.potential() != 1 ||
-            FibonacciHeapPrintable.totalCuts() - cuts != 0 ||
-            FibonacciHeapPrintable.totalLinks() - links != 3 ||
+            FibonacciHeap.totalCuts() - cuts != 0 ||
+            FibonacciHeap.totalLinks() - links != 3 ||
             fibonacciHeap.countersRep()[0] != 0 ||
             fibonacciHeap.countersRep()[1] != 0 ||
             fibonacciHeap.countersRep()[2] != 1) {
@@ -692,14 +692,14 @@ public class Test {
     
     static void test19() {
         String test = "test19";
-        fibonacciHeap = new FibonacciHeapPrintable();
+        fibonacciHeap = new FibonacciHeap();
         
-        int cuts  = FibonacciHeapPrintable.totalCuts();
-        int links = FibonacciHeapPrintable.totalLinks();
+        int cuts  = FibonacciHeap.totalCuts();
+        int links = FibonacciHeap.totalLinks();
         
         fibonacciHeap.insert(4);
         fibonacciHeap.insert(5);
-        FibonacciHeapPrintable.HeapNode node = fibonacciHeap.insert(6);
+        FibonacciHeap.HeapNode node = fibonacciHeap.insert(6);
         fibonacciHeap.deleteMin();
         
         fibonacciHeap.insert(1);
@@ -711,22 +711,22 @@ public class Test {
         fibonacciHeap.deleteMin();
         
         fibonacciHeap.decreaseKey(node, 2);
-        
+    
         if (fibonacciHeap.potential() != 4 ||
-            FibonacciHeapPrintable.totalCuts() - cuts != 1 ||
-            FibonacciHeapPrintable.totalLinks() - links != 3) {
+            FibonacciHeap.totalCuts() - cuts != 1 ||
+            FibonacciHeap.totalLinks() - links != 3) {
             bugFound(test);
         }
     }
     
     static void test20() {
         String test = "test20";
-        fibonacciHeap = new FibonacciHeapPrintable();
+        fibonacciHeap = new FibonacciHeap();
         
         
         fibonacciHeap.insert(4);
-        FibonacciHeapPrintable.HeapNode node5 = fibonacciHeap.insert(5);
-        FibonacciHeapPrintable.HeapNode node6 = fibonacciHeap.insert(6);
+        FibonacciHeap.HeapNode node5 = fibonacciHeap.insert(5);
+        FibonacciHeap.HeapNode node6 = fibonacciHeap.insert(6);
         fibonacciHeap.deleteMin();
         
         fibonacciHeap.insert(1);
@@ -737,28 +737,28 @@ public class Test {
         fibonacciHeap.insert(1);
         fibonacciHeap.deleteMin();
         
-        int cuts  = FibonacciHeapPrintable.totalCuts();
-        int links = FibonacciHeapPrintable.totalLinks();
+        int cuts  = FibonacciHeap.totalCuts();
+        int links = FibonacciHeap.totalLinks();
         
         fibonacciHeap.decreaseKey(node6, 2);
         fibonacciHeap.decreaseKey(node5, 1);
-        
+    
         if (fibonacciHeap.potential() != 4 ||
-            FibonacciHeapPrintable.totalCuts() - cuts != 1 ||
-            FibonacciHeapPrintable.totalLinks() - links != 0) {
+            FibonacciHeap.totalCuts() - cuts != 1 ||
+            FibonacciHeap.totalLinks() - links != 0) {
             bugFound(test);
         }
     }
     
     static void test21() {
         String test = "test21";
-        fibonacciHeap = new FibonacciHeapPrintable();
+        fibonacciHeap = new FibonacciHeap();
         
         int treeSize     = 32768;
         int sizeToDelete = 1000;
         
         
-        ArrayList<FibonacciHeapPrintable.HeapNode> nodes = new ArrayList<>();
+        ArrayList<FibonacciHeap.HeapNode> nodes = new ArrayList<>();
         
         for (int i = treeSize; i < treeSize * 2; i++) {
             nodes.add(fibonacciHeap.insert(i));
@@ -771,7 +771,7 @@ public class Test {
         for (int i = 0; i < sizeToDelete; i++) {
             fibonacciHeap.deleteMin();
         }
-        
+    
         if (fibonacciHeap.potential() != 1) {
             bugFound(test);
         }
@@ -779,12 +779,12 @@ public class Test {
     
     static void test22() {
         String test = "test22";
-        fibonacciHeap = new FibonacciHeapPrintable();
+        fibonacciHeap = new FibonacciHeap();
         
         int treeSize     = 32768;
         int sizeToDelete = 1000;
         
-        ArrayList<FibonacciHeapPrintable.HeapNode> nodes = new ArrayList<>();
+        ArrayList<FibonacciHeap.HeapNode> nodes = new ArrayList<>();
         
         for (int i = treeSize; i < treeSize * 2; i++) {
             nodes.add(fibonacciHeap.insert(i));
@@ -797,14 +797,14 @@ public class Test {
         for (int i = 0; i < sizeToDelete; i++) {
             fibonacciHeap.deleteMin();
         }
-        
-        
+    
+    
         if (fibonacciHeap.potential() != 1) {
             bugFound(test);
         }
         
-        int totalCuts = FibonacciHeapPrintable.totalCuts();
-        int links     = FibonacciHeapPrintable.totalLinks();
+        int totalCuts = FibonacciHeap.totalCuts();
+        int links     = FibonacciHeap.totalLinks();
         
         boolean noCascading = true;
         int     iterationCuts;
@@ -812,18 +812,18 @@ public class Test {
         Collections.shuffle(nodes);
         
         for (int i = 0; i < treeSize; i++) {
-            iterationCuts = FibonacciHeapPrintable.totalCuts();
+            iterationCuts = FibonacciHeap.totalCuts();
             
             fibonacciHeap.decreaseKey(nodes.get(i), nodes.get(i).getKey() - (treeSize - i));
-            
-            if (FibonacciHeapPrintable.totalCuts() - iterationCuts > 1) {
+    
+            if (FibonacciHeap.totalCuts() - iterationCuts > 1) {
                 noCascading = false;
             }
         }
-        
+    
         if (fibonacciHeap.potential() != treeSize ||
-            FibonacciHeapPrintable.totalCuts() - totalCuts != treeSize - 1 ||
-            FibonacciHeapPrintable.totalLinks() - links != 0 ||
+            FibonacciHeap.totalCuts() - totalCuts != treeSize - 1 ||
+            FibonacciHeap.totalLinks() - links != 0 ||
             fibonacciHeap.countersRep()[0] != treeSize ||
             noCascading) {
             bugFound(test);
@@ -832,68 +832,68 @@ public class Test {
     
     static void test23() {
         String test = "test23";
-        fibonacciHeap = new FibonacciHeapPrintable();
+        fibonacciHeap = new FibonacciHeap();
         
         int size      = 1000;
-        int totalCuts = FibonacciHeapPrintable.totalCuts();
-        int links     = FibonacciHeapPrintable.totalLinks();
+        int totalCuts = FibonacciHeap.totalCuts();
+        int links     = FibonacciHeap.totalLinks();
         
         for (int i = size; i > 0; i--) {
             fibonacciHeap.insert(i);
         }
-        
+    
         if (fibonacciHeap.potential() != size ||
-            FibonacciHeapPrintable.totalCuts() - totalCuts != 0 ||
-            FibonacciHeapPrintable.totalLinks() - links != 0) {
+            FibonacciHeap.totalCuts() - totalCuts != 0 ||
+            FibonacciHeap.totalLinks() - links != 0) {
             bugFound(test);
         }
     }
     
     static void test24() {
         String test = "test24";
-        fibonacciHeap = new FibonacciHeapPrintable();
+        fibonacciHeap = new FibonacciHeap();
         
         int size      = 2000;
-        int totalCuts = FibonacciHeapPrintable.totalCuts();
-        int links     = FibonacciHeapPrintable.totalLinks();
+        int totalCuts = FibonacciHeap.totalCuts();
+        int links     = FibonacciHeap.totalLinks();
         
         for (int i = size; i > 0; i--) {
             fibonacciHeap.insert(i);
         }
-        
+    
         if (fibonacciHeap.potential() != size ||
-            FibonacciHeapPrintable.totalCuts() - totalCuts != 0 ||
-            FibonacciHeapPrintable.totalLinks() - links != 0) {
+            FibonacciHeap.totalCuts() - totalCuts != 0 ||
+            FibonacciHeap.totalLinks() - links != 0) {
             bugFound(test);
         }
     }
     
     static void test25() {
         String test = "test25";
-        fibonacciHeap = new FibonacciHeapPrintable();
+        fibonacciHeap = new FibonacciHeap();
         
         int size      = 3000;
-        int totalCuts = FibonacciHeapPrintable.totalCuts();
-        int links     = FibonacciHeapPrintable.totalLinks();
+        int totalCuts = FibonacciHeap.totalCuts();
+        int links     = FibonacciHeap.totalLinks();
         
         for (int i = size; i > 0; i--) {
             fibonacciHeap.insert(i);
         }
-        
+    
         if (fibonacciHeap.potential() != size ||
-            FibonacciHeapPrintable.totalCuts() - totalCuts != 0 ||
-            FibonacciHeapPrintable.totalLinks() - links != 0) {
+            FibonacciHeap.totalCuts() - totalCuts != 0 ||
+            FibonacciHeap.totalLinks() - links != 0) {
             bugFound(test);
         }
     }
     
     static void test26() {
         String test = "test26";
-        fibonacciHeap = new FibonacciHeapPrintable();
+        fibonacciHeap = new FibonacciHeap();
         
         int size      = 1000;
-        int totalCuts = FibonacciHeapPrintable.totalCuts();
-        int links     = FibonacciHeapPrintable.totalLinks();
+        int totalCuts = FibonacciHeap.totalCuts();
+        int links     = FibonacciHeap.totalLinks();
         
         for (int i = size; i > 0; i--) {
             fibonacciHeap.insert(i);
@@ -906,21 +906,21 @@ public class Test {
             }
             fibonacciHeap.deleteMin();
         }
-        
+    
         if (fibonacciHeap.potential() > 100 ||
-            FibonacciHeapPrintable.totalCuts() - totalCuts != 0 ||
-            FibonacciHeapPrintable.totalLinks() - links < size - 100) {
+            FibonacciHeap.totalCuts() - totalCuts != 0 ||
+            FibonacciHeap.totalLinks() - links < size - 100) {
             bugFound(test);
         }
     }
     
     static void test27() {
         String test = "test27";
-        fibonacciHeap = new FibonacciHeapPrintable();
+        fibonacciHeap = new FibonacciHeap();
         
         int size      = 2000;
-        int totalCuts = FibonacciHeapPrintable.totalCuts();
-        int links     = FibonacciHeapPrintable.totalLinks();
+        int totalCuts = FibonacciHeap.totalCuts();
+        int links     = FibonacciHeap.totalLinks();
         
         for (int i = size; i > 0; i--) {
             fibonacciHeap.insert(i);
@@ -933,21 +933,21 @@ public class Test {
             }
             fibonacciHeap.deleteMin();
         }
-        
+    
         if (fibonacciHeap.potential() > 100 ||
-            FibonacciHeapPrintable.totalCuts() - totalCuts != 0 ||
-            FibonacciHeapPrintable.totalLinks() - links < size - 100) {
+            FibonacciHeap.totalCuts() - totalCuts != 0 ||
+            FibonacciHeap.totalLinks() - links < size - 100) {
             bugFound(test);
         }
     }
     
     static void test28() {
         String test = "test28";
-        fibonacciHeap = new FibonacciHeapPrintable();
+        fibonacciHeap = new FibonacciHeap();
         
         int size      = 3000;
-        int totalCuts = FibonacciHeapPrintable.totalCuts();
-        int links     = FibonacciHeapPrintable.totalLinks();
+        int totalCuts = FibonacciHeap.totalCuts();
+        int links     = FibonacciHeap.totalLinks();
         
         for (int i = size; i > 0; i--) {
             fibonacciHeap.insert(i);
@@ -960,10 +960,10 @@ public class Test {
             }
             fibonacciHeap.deleteMin();
         }
-        
+    
         if (fibonacciHeap.potential() > 100 ||
-            FibonacciHeapPrintable.totalCuts() - totalCuts != 0 ||
-            FibonacciHeapPrintable.totalLinks() - links < size - 100) {
+            FibonacciHeap.totalCuts() - totalCuts != 0 ||
+            FibonacciHeap.totalLinks() - links < size - 100) {
             bugFound(test);
         }
     }

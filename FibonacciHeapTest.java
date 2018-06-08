@@ -21,10 +21,10 @@ public class FibonacciHeapTest {
     
     private static void test4() {
         FibonacciHeapPrintable heap = new FibonacciHeapPrintable();
-        doOperation(heap, OperationType.Ins, 5, null);
-        doOperation(heap, OperationType.Ins, 4, null);
-        doOperation(heap, OperationType.Ins, 3, null);
+        doOperation(heap, OperationType.Ins, 1, null);
         doOperation(heap, OperationType.Ins, 2, null);
+        doOperation(heap, OperationType.DelMin, 5, null);
+        doOperation(heap, OperationType.DelMin, 5, null);
         
         System.out.println("done");
         
@@ -98,13 +98,23 @@ public class FibonacciHeapTest {
             
         }
         
-        
-        System.out.println(
-                Arrays.toString(heap.countersRep()) + //
-                " Size: " + heap.size() + //
-                " min : " + heap.findMin().getKey() + //
-                " TreesCount: " + heap.treesCount()
-        );
+        if (heap.empty()) {
+            System.out.println(
+                    Arrays.toString(heap.countersRep()) + //
+                    " Size: " + heap.size() + //
+                    // " min : " + heap.findMin().getKey() + //
+                    " TreesCount: " + heap.treesCount()
+            );
+            
+        } else {
+            System.out.println(
+                    Arrays.toString(heap.countersRep()) + //
+                    " Size: " + heap.size() + //
+                    " min : " + heap.findMin().getKey() + //
+                    " TreesCount: " + heap.treesCount()
+            );
+            
+        }
         
         System.out.println(heap.toString());
         
