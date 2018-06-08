@@ -36,7 +36,16 @@ public class FibonacciHeapPrintable extends FibonacciHeap {
         StringBuilder output = new StringBuilder();
         String        space  = getSpace(level);
         
+        if (!node.isRoot()) {
+            output.append("(");
+            output.append(node.parent.key);
+            output.append(")");
+        }
         output.append(node.key);
+        
+        if (node.isMarked()) {
+            output.append("*");
+        }
         output.append(" -> ");
         
         if (node.isLeaf()) {

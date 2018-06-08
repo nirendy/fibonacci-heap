@@ -41,6 +41,17 @@ public class FibonacciHeap {
      */
     public HeapNode insert(int key) {
         HeapNode newNode = new HeapNode(key);
+        insertNode(newNode);
+        checkAndChangeMin(newNode);
+        this.size++;
+        return newNode;
+        
+    }
+    
+    public HeapNode insertNode(HeapNode newNode) {
+        // disconnect the node if was part of a tree before
+        newNode.disconnect();
+        
         if (this.empty()) {
             this.min = newNode;
             this.first = newNode;
@@ -50,7 +61,6 @@ public class FibonacciHeap {
             newNode.setNext(this.first);
         }
         
-        this.size++;
         this.treesCount++;
         return newNode;
     }
@@ -109,8 +119,7 @@ public class FibonacciHeap {
         
         while (treesListIterator.hasNext()) {
             HeapNode nextTree = treesListIterator.next();
-            nextTree.remove();
-            nextTree.setNext(nextTree);
+            nextTree.removeSiblingsRelations();
             
             while (bucketArr[nextTree.rank] != null) {
                 // bucket is full
@@ -120,8 +129,6 @@ public class FibonacciHeap {
             }
             bucketArr[nextTree.rank] = nextTree;
         }
-        
-        // TODO: should we update min or update trees count?
         
         this.first = null;
         for (HeapNode heapNode : bucketArr) {
@@ -139,7 +146,10 @@ public class FibonacciHeap {
     
     private void updateMin() {
         this.min = this.first;
-        this.getTreesListIterator().forEachRemaining((x) -> this.min = x.key < this.min.key ? x : this.min);
+        this.getTreesListIterator().forEachRemaining((x) -> {
+            x.parent = null;
+            this.min = x.key < this.min.key ? x : this.min;
+        });
     }
     
     private void updateTreesCount() {
@@ -217,8 +227,16 @@ public class FibonacciHeap {
      * Deletes the node x from the heap.
      */
     public void delete(HeapNode x) {
-        // TODO
-        return;
+        size--;
+        if (size == 0) {
+            this.min = null;
+            this.first = null;
+            return;
+        }
+        
+        this.decreaseKey(x, x.getKey() - this.findMin().getKey() - 1);
+        this.deleteMin();
+        
     }
     
     /**
@@ -228,8 +246,30 @@ public class FibonacciHeap {
      * to reflect this chage (for example, the cascading cuts procedure should be applied if needed).
      */
     public void decreaseKey(HeapNode x, int delta) {
-        // TODO
-        return;
+        x.decreaseKeyBy(delta);
+        checkAndChangeMin(x);
+        if (x.isRoot() || x.getKey() >= x.parent.getKey()) {
+            return;
+        }
+        
+        HeapNode curr = x;
+        do {
+            totalCuts++;
+            HeapNode currParent = curr.parent;
+            this.insertNode(curr);
+            curr = currParent;
+        } while (!curr.isRoot() && curr.parent.isMarked());
+        
+        if (!curr.isRoot()) {
+            curr.markNode();
+        }
+        
+    }
+    
+    private void checkAndChangeMin(HeapNode possiblyMinNode) {
+        if (possiblyMinNode.getKey() < this.min.getKey()) {
+            this.min = possiblyMinNode;
+        }
     }
     
     /**
@@ -282,7 +322,7 @@ public class FibonacciHeap {
             childNode.setNext(oldFirst);
         }
         
-        parentNode.rank++;
+        parentNode.increaseRank();
         return parentNode;
     }
     
@@ -294,13 +334,22 @@ public class FibonacciHeap {
      * another file
      */
     public class HeapNode {
-        private int      rank       = 0;
-        private boolean  mark       = false;
-        private HeapNode parent     = null;
-        private HeapNode firstChild = null;
+        private   int      rank       = 0;
+        private   boolean  mark       = false;
+        protected HeapNode parent     = null;
+        private   HeapNode firstChild = null;
         private HeapNode next;
         private HeapNode prev;
         public  int      key;
+        
+        
+        private void increaseRank() {
+            this.rank++;
+        }
+        
+        private void decreaseRank() {
+            this.rank--;
+        }
         
         public HeapNode(int key) {
             this.key = key;
@@ -310,22 +359,59 @@ public class FibonacciHeap {
             return this.next == this;
         }
         
+        private boolean isFirstChild() {
+            // TODO: what if root
+            return this.parent.firstChild == this;
+        }
+        
+        protected boolean isMarked() {
+            return this.mark;
+        }
+        
+        protected void markNode() {
+            this.mark = true;
+        }
+        
+        private void decreaseKeyBy(int delta) {
+            this.key -= delta;
+        }
+        
         protected boolean isLeaf() {
             // todo: rank==0?
             return this.firstChild == null;
         }
         
-        private boolean isRoot() {
+        protected boolean isRoot() {
             return this.parent == null;
+        }
+        
+        private void disconnect() {
+            // disconnect the node
+            if (!this.isRoot()) {
+                
+                // set parent first child
+                if (this.isOnlyChild()) {
+                    this.parent.setFirstChild(null);
+                } else {
+                    if (this.isFirstChild()) {
+                        this.parent.setFirstChild(this.next);
+                    }
+                    this.removeSiblingsRelations();
+                }
+                
+                this.parent.decreaseRank();
+                this.parent = null;
+            }
+            this.mark = false;
         }
         
         public int getKey() {
             return this.key;
         }
         
-        public void remove() {
-            // TODO: what if only child
+        public void removeSiblingsRelations() {
             this.prev.setNext(this.next);
+            this.setNext(this);
         }
         
         
@@ -335,7 +421,12 @@ public class FibonacciHeap {
         
         public void setFirstChild(HeapNode firstChild) {
             this.firstChild = firstChild;
+            
+            if (firstChild != null) {
+                firstChild.parent = this;
+            }
         }
+        
         
         // set this.next and next.prev
         public void setNext(HeapNode next) {
