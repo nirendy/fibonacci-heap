@@ -1,4 +1,3 @@
-import java.util.Arrays;
 import java.util.Optional;
 
 public class FibonacciHeapTest {
@@ -16,15 +15,86 @@ public class FibonacciHeapTest {
     }
     
     public static void main(String[] args) {
-        test3();
+        test8();
+    }
+    
+    private static void test8() {
+        FibonacciHeapPrintable heap = new FibonacciHeapPrintable();
+        
+        doOperation(heap, OperationType.DelMin, null, null);
+        
+        System.out.println("done");
+        
+    }
+    
+    private static void test7() {
+        FibonacciHeapPrintable heap1 = new FibonacciHeapPrintable();
+        FibonacciHeapPrintable heap2 = new FibonacciHeapPrintable();
+        
+        // doOperation(heap1, OperationType.Ins, 50, null);
+        doOperation(heap2, OperationType.Ins, 60, null);
+        
+        heap1.meld(heap2);
+        
+        heap1.updateString();
+        System.out.println(heap1.lastString);
+        
+        System.out.println("done");
+        
+    }
+    
+    
+    private static void test6() {
+        FibonacciHeapPrintable                 heap = new FibonacciHeapPrintable();
+        sun.misc.Queue<FibonacciHeap.HeapNode> a    = new sun.misc.Queue<>();
+        doOperation(heap, OperationType.Ins, 50, null);
+        doOperation(heap, OperationType.Ins, 60, null);
+        a.enqueue(doOperation(heap, OperationType.Ins, 70, null).get());
+        doOperation(heap, OperationType.Ins, 80, null);
+        a.enqueue(doOperation(heap, OperationType.Ins, 90, null).get());
+        doOperation(heap, OperationType.Ins, 100, null);
+        doOperation(heap, OperationType.Ins, 110, null);
+        doOperation(heap, OperationType.Ins, 120, null);
+        a.enqueue(doOperation(heap, OperationType.Ins, 130, null).get());
+        doOperation(heap, OperationType.DelMin, null, null);
+        try {
+            doOperation(heap, OperationType.Dec, 11, a.dequeue());
+            doOperation(heap, OperationType.Dec, 11, a.dequeue());
+            doOperation(heap, OperationType.Dec, 11, a.dequeue());
+        } catch (InterruptedException err) {
+            System.out.println(err);
+        }
+        
+        
+        doOperation(heap, OperationType.DelMin, null, null);
+        doOperation(heap, OperationType.DelMin, null, null);
+        
+        
+        System.out.println("done");
+        
+    }
+    
+    private static void test5() {
+        FibonacciHeapPrintable heap = new FibonacciHeapPrintable();
+        for (int i = 100; i >= 1; i--) {
+            doOperation(heap, OperationType.Ins, i, null);
+        }
+        
+        for (int i = 50; i >= 1; i--) {
+            doOperation(heap, OperationType.DelMin, null, null);
+        }
+        
+        
+        System.out.println("done");
+        
     }
     
     private static void test4() {
         FibonacciHeapPrintable heap = new FibonacciHeapPrintable();
         doOperation(heap, OperationType.Ins, 1, null);
         doOperation(heap, OperationType.Ins, 2, null);
-        doOperation(heap, OperationType.DelMin, 5, null);
-        doOperation(heap, OperationType.DelMin, 5, null);
+        doOperation(heap, OperationType.DelMin, null, null);
+        doOperation(heap, OperationType.DelMin, null, null);
         
         System.out.println("done");
         
@@ -66,7 +136,7 @@ public class FibonacciHeapTest {
         
     }
     
-    private static Optional<FibonacciHeap.HeapNode> doOperation(FibonacciHeap heap, OperationType opT, Integer num, FibonacciHeap.HeapNode node) {
+    private static Optional<FibonacciHeap.HeapNode> doOperation(FibonacciHeapPrintable heap, OperationType opT, Integer num, FibonacciHeap.HeapNode node) {
         System.out.print(opT.name);
         if (node != null) {
             System.out.print("node key: " + node.key);
@@ -98,25 +168,8 @@ public class FibonacciHeapTest {
             
         }
         
-        if (heap.empty()) {
-            System.out.println(
-                    Arrays.toString(heap.countersRep()) + //
-                    " Size: " + heap.size() + //
-                    // " min : " + heap.findMin().getKey() + //
-                    " TreesCount: " + heap.treesCount()
-            );
-            
-        } else {
-            System.out.println(
-                    Arrays.toString(heap.countersRep()) + //
-                    " Size: " + heap.size() + //
-                    " min : " + heap.findMin().getKey() + //
-                    " TreesCount: " + heap.treesCount()
-            );
-            
-        }
-        
-        System.out.println(heap.toString());
+        heap.updateString();
+        System.out.println(heap.lastString);
         
         if (heapNode != null) {
             return Optional.of(heapNode);

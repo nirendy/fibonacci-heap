@@ -13,12 +13,20 @@ public class FibonacciHeapPrintable extends FibonacciHeap {
     public void updateString() {
         StringBuilder stringB = new StringBuilder();
         stringB.append(Arrays.toString(this.countersRep()))
-                .append(" Size: ")
-                .append(this.size())
-                .append(" min : ")
-                .append(this.findMin().getKey())
-                .append(" TreesCount: ")
+                .append(", Size: ")
+                .append(this.size());
+        
+        if (!this.empty()) {
+            stringB.append(", min : ")
+                    .append(this.findMin().getKey());
+        }
+        
+        stringB.append(", TreesCount: ")
                 .append(this.treesCount())
+                .append(", Mark count: ")
+                .append(this.markedNodesCount)
+                .append(", potential: ")
+                .append(this.potential())
                 .append("\n");
         
         this.lastString = stringB.toString() + toString();
@@ -55,11 +63,11 @@ public class FibonacciHeapPrintable extends FibonacciHeap {
         StringBuilder output = new StringBuilder();
         String        space  = getSpace(level);
         
-        if (!node.isRoot()) {
-            output.append("(");
-            output.append(node.parent.key);
-            output.append(")");
-        }
+        // if (!node.isRoot()) {
+        //     output.append("(");
+        //     output.append(node.parent.key);
+        //     output.append(")");
+        // }
         output.append(node.key);
         
         if (node.isMarked()) {
