@@ -91,6 +91,9 @@ public class FibonacciHeap {
     public void deleteMin() {
         HeapNode oldMin = this.findMin();
 
+        if (empty()){
+            return;
+        }
 
         if (oldMin.isOnlyChild()) { // only one tree in the heap
             if (oldMin.isLeaf()) { // and the single tree contains only one node
@@ -310,6 +313,10 @@ public class FibonacciHeap {
 
     }
 
+    /*
+    * @pre min is not null
+    * Compares possiblyMinNode to the current min, set it to the new min if needed
+     */
     private void checkAndChangeMin(HeapNode possiblyMinNode) {
         if (possiblyMinNode.getKey() < this.min.getKey()) {
             this.min = possiblyMinNode;
