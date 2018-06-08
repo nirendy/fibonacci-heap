@@ -216,11 +216,14 @@ public class FibonacciHeap {
         }
         if (this.empty()){ // heap2 is not empty
             this.first = heap2.first;
+            this.min = heap2.findMin();
         }
         else {
             HeapNode oldLast = this.last();
             heap2.last().setNext(this.first);
             oldLast.setNext(heap2.first);
+            if (heap2.min.key < this.min.key) { // update min
+                this.min = heap2.min;
         }
         
         // update sizes
@@ -228,9 +231,7 @@ public class FibonacciHeap {
         this.size += heap2.size();
         this.markedNodesCount += heap2.markedNodesCount;
         
-        // update min
-        if (heap2.min.key < this.min.key) {
-            this.min = heap2.min;
+
         }
     }
     
@@ -244,10 +245,9 @@ public class FibonacciHeap {
     }
 
     /*
-
+    * Returns the maximum possible rank of a tree in the heap
      */
     private int getPossibleMaxRank() {
-        // TODO: where to put the +1
         return (int) Math.floor((Math.log(this.size()) + 1) / Math.log(2));
     }
     
@@ -258,7 +258,7 @@ public class FibonacciHeap {
      */
     public int[] countersRep() {
         if (this.empty()) {
-            return new int[1];
+            return new int[1]; // returns an array containing a single zero
         }
         int[] arr = new int[this.getPossibleMaxRank()];
         
