@@ -211,7 +211,7 @@ public class FibonacciHeap {
      */
     public void meld(FibonacciHeap heap2) {
         // add tree list of heap2 at the end of this heap
-        if (heap2.empty()){
+        if (heap2.empty()){ // meld with an empty heap, nothing to do
             return;
         }
         if (this.empty()){ // heap2 is not empty
@@ -222,17 +222,15 @@ public class FibonacciHeap {
             HeapNode oldLast = this.last();
             heap2.last().setNext(this.first);
             oldLast.setNext(heap2.first);
-            if (heap2.min.key < this.min.key) { // update min
+            if (heap2.min.key < this.min.key) {  // update min
                 this.min = heap2.min;
+            }
         }
-        
+
         // update sizes
         this.treesCount += heap2.treesCount();
         this.size += heap2.size();
         this.markedNodesCount += heap2.markedNodesCount;
-        
-
-        }
     }
     
     /**
