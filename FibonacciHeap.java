@@ -1,3 +1,5 @@
+import com.sun.org.apache.xpath.internal.axes.ChildIterator;
+
 import java.util.*;
 
 /**
@@ -93,6 +95,11 @@ public class FibonacciHeap {
 
         if (empty()){
             return;
+        }
+
+        Iterator<HeapNode> childIterator = oldMin.getChildIterator();
+        while (childIterator.hasNext()){ // removes marks from the oldMin children before they become roots
+            childIterator.next().unMarkNode();
         }
 
         if (oldMin.isOnlyChild()) { // only one tree in the heap
@@ -356,6 +363,9 @@ public class FibonacciHeap {
         return totalCuts;
     }
 
+    /*
+    * Link two trees together, returns the root of the new tree
+     */
     static private HeapNode link(HeapNode x, HeapNode y) {
         totalLinks++;
 
@@ -363,10 +373,10 @@ public class FibonacciHeap {
         HeapNode parentNode = x.key < y.key ? x : y;
         HeapNode childNode  = parentNode == x ? y : x;
 
-        if (parentNode.isLeaf()) {
+        if (parentNode.isLeaf()) { // the node which is supposed to be the parent had no children before the link
             parentNode.setFirstChild(childNode);
         } else {
-            // puts the child as the first node of the parent
+            // puts the node as the first child of the parent
             HeapNode oldFirst = parentNode.firstChild;
             parentNode.setFirstChild(childNode);
             oldFirst.prev.setNext(childNode);
@@ -393,6 +403,9 @@ public class FibonacciHeap {
         private HeapNode prev;
         public  int      key;
 
+        public HeapNode(int key) {
+            this.key = key;
+        }
 
         private void increaseRank() {
             this.rank++;
@@ -400,10 +413,6 @@ public class FibonacciHeap {
 
         private void decreaseRank() {
             this.rank--;
-        }
-
-        public HeapNode(int key) {
-            this.key = key;
         }
 
         private boolean isOnlyChild() {
