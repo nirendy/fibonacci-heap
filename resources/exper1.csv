@@ -1,0 +1,4 @@
+﻿index,M   ,Run-Time (in miliseconds),totalLinks,totalCuts,Potential
+1    ,1000,0.673854                 ,0         ,0        ,1000
+2    ,2000,0.762897                 ,0         ,0        ,2000
+3    ,3000,2.604518                 ,0         ,0        ,3000

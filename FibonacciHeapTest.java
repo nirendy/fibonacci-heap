@@ -16,7 +16,7 @@ public class FibonacciHeapTest {
     }
     
     public static void main(String[] args) {
-        test4();
+        test3();
     }
     
     private static void test4() {
