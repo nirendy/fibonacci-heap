@@ -6,6 +6,8 @@ import java.util.*;
  * FibonacciHeap
  * <p>
  * An implementation of fibonacci heap over non-negative integers.
+ * made by: Yahav Ben Yaakov (Yahavb), 305170987
+ *          Nir Endy (Nirendy), 205686397
  */
 public class FibonacciHeap {
     static private int totalLinks       = 0;
@@ -407,27 +409,46 @@ public class FibonacciHeap {
             this.key = key;
         }
 
+        /*
+        * Increase rank by 1
+         */
         private void increaseRank() {
             this.rank++;
         }
 
+        /*
+        * Decrease rank by 1
+         */
         private void decreaseRank() {
             this.rank--;
         }
 
+        /*
+         * Returns true iff node has no siblings
+         */
         private boolean isOnlyChild() {
             return this.next == this;
         }
 
+        /*
+        * @pre node is not a root
+        * return true iff the node is firstChild of his parent
+         */
         private boolean isFirstChild() {
             // TODO: what if root
             return this.parent.firstChild == this;
         }
 
+        /*
+        * Returns true iff the node is marked
+         */
         protected boolean isMarked() {
             return this.mark;
         }
 
+        /*
+        * Marks the node
+         */
         private void markNode() {
             if (!this.isMarked()) {
                 this.mark = true;
@@ -435,6 +456,9 @@ public class FibonacciHeap {
             }
         }
 
+        /*
+        * Unmarks the node
+         */
         private void unMarkNode() {
             if (this.isMarked()) {
                 this.mark = false;
@@ -442,15 +466,23 @@ public class FibonacciHeap {
             }
         }
 
+        /*
+        * Decrease the key by delta
+         */
         private void decreaseKeyBy(int delta) {
             this.key -= delta;
         }
 
+        /*
+        * Returns true iff the node has no children
+         */
         protected boolean isLeaf() {
-            // todo: rank==0?
             return this.firstChild == null;
         }
 
+        /*
+        * Returns true iff the node is a root
+         */
         protected boolean isRoot() {
             return this.parent == null;
         }
@@ -477,7 +509,9 @@ public class FibonacciHeap {
 
             this.unMarkNode();
         }
-
+        /*
+        * Returns the key of the node
+         */
         public int getKey() {
             return this.key;
         }
@@ -490,11 +524,9 @@ public class FibonacciHeap {
             this.setNext(this);
         }
 
-
-        public void setParent(HeapNode parent) {
-            this.parent = parent;
-        }
-
+        /*
+        * Sets firstChild as a firstChild of the current node (which becomes his parent)
+         */
         public void setFirstChild(HeapNode firstChild) {
             this.firstChild = firstChild;
 
@@ -504,12 +536,18 @@ public class FibonacciHeap {
         }
 
 
-        // set this.next and next.prev
-        public void setNext(HeapNode next) {
-            this.next = next;
-            next.prev = this;
+        /*
+        * @pre set
+        * Sets nextNode as a right sibling to the current node
+         */
+        public void setNext(HeapNode nextNode) {
+            this.next = nextNode;
+            nextNode.prev = this;
         }
 
+        /*
+        * Returns an iterator of the current node and his siblings
+         */
         public Iterator<HeapNode> getSiblingsIterator() {
             return new Iterator<HeapNode>() {
                 private HeapNode curr = null;
@@ -531,6 +569,9 @@ public class FibonacciHeap {
             };
         }
 
+        /*
+        * Returns an iterator of the children of the current node
+         */
         public Iterator<HeapNode> getChildIterator() {
             if (this.isLeaf()) {
                 // empty iterator
